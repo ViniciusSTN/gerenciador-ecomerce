@@ -16,9 +16,12 @@ module.exports = {
     //   Poppins: ['Poppins', 'sans-serif'],
     // },
     extend: {
-      // colors: {},
+      colors: {
+        red: '#FF0000',
+      },
       spacing: {
-        'screen-header': 'calc(100vh - 62px)',
+        'screen-header': 'calc(100vh - 50px)',
+        '1440px': '90rem',
       },
       screens: {
         '1.5xl': '1440px',
