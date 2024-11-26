@@ -30,6 +30,14 @@ export const Header = () => {
         <Link href="/novo-carrinho" className="px-4 hover:text-blue-500">
           Novo carrinho
         </Link>
+
+        <Link href="/usuarios" className="px-4 hover:text-blue-500">
+          Usuários
+        </Link>
+
+        <Link href="/novo-usuario" className="px-4 hover:text-blue-500">
+          Novo usuário
+        </Link>
       </nav>
     </header>
   )
