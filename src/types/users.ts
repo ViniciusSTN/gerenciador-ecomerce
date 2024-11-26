@@ -21,6 +21,28 @@ export type UserType = {
   phone: string
 }
 
+export type UserTypeWithId = {
+  id: number
+  email: string
+  username: string
+  password: string
+  name: {
+    firstname: string
+    lastname: string
+  }
+  address: {
+    city: string
+    street: string
+    number: number
+    zipcode: string
+    geolocation: {
+      lat: string
+      long: string
+    }
+  }
+  phone: string
+}
+
 export type UserStateType = {
   email: string
   username: string
@@ -29,7 +51,7 @@ export type UserStateType = {
   lastname: string
   city: string
   street: string
-  number: number
+  number: string
   zipcode: string
   lat: string
   long: string
@@ -52,7 +74,7 @@ export type UserErrors = {
 }
 
 export type SuceessResponseWithAllUsers = SuccessResponse & {
-  users: UserType[]
+  users: UserTypeWithId[]
 }
 
 export type GetAllUsersType = () => Promise<
@@ -70,5 +92,18 @@ export type EditUserProps = {
 export type EditUserType = (props: EditUserProps) => JSX.Element
 
 export type CreateUserType = (
+  user: UserStateType,
+) => Promise<ErrorResponse | SuccessResponse>
+
+export type SuccessResponseWithUserData = SuccessResponse & {
+  user: UserStateType
+}
+
+export type GetUserDataType = (
+  id: number,
+) => Promise<ErrorResponse | SuccessResponseWithUserData>
+
+export type UpdateUserType = (
+  id: number,
   user: UserStateType,
 ) => Promise<ErrorResponse | SuccessResponse>

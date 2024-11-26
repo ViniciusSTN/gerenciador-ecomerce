@@ -1,19 +1,17 @@
 'use client'
 
 import { getAllUsers, removeUser } from '@/data/users'
-import { UserType } from '@/types/users'
+import { UserTypeWithId } from '@/types/users'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 export const UsersSection = () => {
-  const [users, setUsers] = useState<UserType[]>([])
+  const [users, setUsers] = useState<UserTypeWithId[]>([])
 
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getAllUsers()
-
-      console.log(response)
 
       if (response.success) setUsers(response.users)
     }

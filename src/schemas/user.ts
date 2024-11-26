@@ -18,14 +18,8 @@ export const editUserSchema = z.object({
     .string()
     .min(1, 'O CEP é obrigatório')
     .regex(/^\d+$/, 'O CEP deve conter apenas números'),
-  lat: z
-    .string()
-    .min(1, 'A latitude é obrigatória')
-    .regex(/^\d+(\.\d+)?$/, 'A latitude deve conter apenas números'),
-  long: z
-    .string()
-    .min(1, 'A longitude é obrigatória')
-    .regex(/^\d+(\.\d+)?$/, 'A longitude deve conter apenas números'),
+  lat: z.string().min(1, 'A latitude é obrigatória'),
+  long: z.string().min(1, 'A longitude é obrigatória'),
   phone: z
     .string()
     .min(10, 'O telefone é obrigatório')

@@ -1,9 +1,10 @@
 'use client'
 
-import { createUser } from '@/data/users'
+import { createUser, getUserData, updateUser } from '@/data/users'
 import { editUserSchema } from '@/schemas/user'
 import { EditUserType, UserErrors, UserStateType } from '@/types/users'
-import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
 
 const initialData: UserStateType = {
@@ -14,7 +15,7 @@ const initialData: UserStateType = {
   lastname: '',
   city: '',
   street: '',
-  number: 0,
+  number: '',
   zipcode: '',
   lat: '',
   long: '',
@@ -40,6 +41,28 @@ export const EditUser: EditUserType = ({ editing }) => {
   const [user, setUser] = useState<UserStateType>(initialData)
   const [userErrors, setUserErrors] = useState<UserErrors>(initialErrors)
 
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+
+  const router = useRouter()
+
+  useEffect(() => {
+    const fetchUserData = async () => {
+      if (id) {
+        const result = await getUserData(Number(id))
+
+        if (result.success) {
+          setUser(result.user)
+        } else {
+          toast.error('Erro ao buscar usuário')
+          router.push('/usuarios')
+        }
+      }
+    }
+
+    if (editing && id) fetchUserData()
+  }, [editing, searchParams, id, router])
+
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
 
@@ -51,7 +74,21 @@ export const EditUser: EditUserType = ({ editing }) => {
         ...validations.error.formErrors.fieldErrors,
       })
     } else {
-      createNewUser()
+      if (!editing) createNewUser()
+      else editUser()
+    }
+  }
+
+  const editUser = async () => {
+    if (id) {
+      const response = await updateUser(Number(id), user)
+
+      if (response.success) {
+        toast.success('Usuário editado com sucesso')
+        router.push('/usuarios')
+      } else {
+        toast.error('Erro ao editar usuário')
+      }
     }
   }
 
