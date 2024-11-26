@@ -30,6 +30,8 @@ export const ProductsSection = () => {
       const newProducts = previousProducts.filter((p) => p.id !== id)
       setProducts(newProducts)
       toast.success('Produto deletado')
+    } else {
+      toast.error('Erro ao remover produto')
     }
   }
 
