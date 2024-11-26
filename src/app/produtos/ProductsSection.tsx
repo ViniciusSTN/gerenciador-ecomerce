@@ -61,7 +61,7 @@ export const ProductsSection = () => {
 
               <Link
                 className="absolute bottom-4 right-4 rounded-md border bg-blue-900 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
-                href={`/editar-produto/${product.id}`}
+                href={`/editar-produto?id=${product.id}`}
               >
                 Editar
               </Link>

@@ -13,12 +13,16 @@ export type ProductType = {
   }
 }
 
-export type SuccessResponseWithProduct = SuccessResponse & {
+export type SuccessResponseWithAllProducts = SuccessResponse & {
   products: ProductType[]
 }
 
+export type SuccessResponseWithProduct = SuccessResponse & {
+  product: ProductType
+}
+
 export type GetAllProductsType = () => Promise<
-  ErrorResponse | SuccessResponseWithProduct
+  ErrorResponse | SuccessResponseWithAllProducts
 >
 
 export type EditProductProps = {
@@ -44,5 +48,14 @@ export type EditProductDataErrors = {
 }
 
 export type CreateProductType = (
+  product: EditProductData,
+) => Promise<SuccessResponse | ErrorResponse>
+
+export type GetProductType = (
+  id: number,
+) => Promise<ErrorResponse | SuccessResponseWithProduct>
+
+export type UpdateProductType = (
+  id: number,
   product: EditProductData,
 ) => Promise<SuccessResponse | ErrorResponse>

@@ -1,12 +1,13 @@
 'use client'
 
-import { createProduct } from '@/data/products'
+import { createProduct, getProduct, updateProduct } from '@/data/products'
 import { editProductSchema } from '@/schemas/product'
 import {
   EditProductData,
   EditProductDataErrors,
   EditProductType,
 } from '@/types/products'
+import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 
@@ -31,7 +32,34 @@ export const EditProduct: EditProductType = ({ editing }) => {
   const [productErrors, setProductErrors] =
     useState<EditProductDataErrors>(initialErrors)
 
+  const searchParams = useSearchParams()
+  const id = searchParams.get('id')
+
+  const router = useRouter()
+
   const fileInputRef = useRef<HTMLInputElement | null>(null)
+
+  useEffect(() => {
+    const fetchProductData = async () => {
+      if (id) {
+        const result = await getProduct(Number(id))
+
+        console.log(result)
+
+        if (result.success) {
+          setProduct({
+            title: result.product.title,
+            category: result.product.category,
+            image: result.product.image,
+            description: result.product.description,
+            price: result.product.price,
+          })
+        }
+      }
+    }
+
+    if (editing && id) fetchProductData()
+  }, [editing, searchParams, id])
 
   const handleFormSubmit = async (event: React.FormEvent) => {
     event.preventDefault()
@@ -40,7 +68,7 @@ export const EditProduct: EditProductType = ({ editing }) => {
 
     if (validation.success) {
       if (editing) {
-        // editar produto
+        sendDataToUpdateProduct() // editar produto
       } else {
         sendDataToCreateProduct() // criar produto
       }
@@ -105,9 +133,24 @@ export const EditProduct: EditProductType = ({ editing }) => {
     }
   }
 
-  useEffect(() => {
-    console.log(product)
-  }, [product])
+  const sendDataToUpdateProduct = async () => {
+    if (id) {
+      const response = await updateProduct(Number(id), product)
+
+      if (response.success) {
+        toast.success('Produto Atualizado com sucesso')
+        setProduct(initialData)
+
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ''
+        }
+
+        router.push('/produtos')
+      } else {
+        toast.error('Não foi possível atualizar o produto')
+      }
+    }
+  }
 
   return (
     <form action="" className="mx-auto max-w-96" onSubmit={handleFormSubmit}>
