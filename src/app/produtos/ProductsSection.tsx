@@ -1,9 +1,10 @@
 'use client'
 
-import { getAllProducts } from '@/data/products'
+import { getAllProducts, removeProduct } from '@/data/products'
 import { ProductType } from '@/types/products'
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { toast } from 'react-toastify'
 
 export const ProductsSection = () => {
   const [products, setProducts] = useState<ProductType[]>([])
@@ -20,6 +21,17 @@ export const ProductsSection = () => {
 
     fetchProducts()
   }, [])
+
+  const handleRemoveProduct = async (id: number) => {
+    const result = await removeProduct(id)
+
+    if (result.success) {
+      const previousProducts = [...products]
+      const newProducts = previousProducts.filter((p) => p.id !== id)
+      setProducts(newProducts)
+      toast.success('Produto deletado')
+    }
+  }
 
   return (
     <section className="mb-10">
@@ -59,12 +71,21 @@ export const ProductsSection = () => {
                 />
               </div>
 
-              <Link
-                className="absolute bottom-4 right-4 rounded-md border bg-blue-900 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
-                href={`/editar-produto?id=${product.id}`}
-              >
-                Editar
-              </Link>
+              <div className="absolute bottom-4 right-4 flex gap-2">
+                <Link
+                  className="flex w-28 justify-center rounded-md border bg-blue-900 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
+                  href={`/editar-produto?id=${product.id}`}
+                >
+                  Editar
+                </Link>
+
+                <button
+                  className="w-28 rounded-md border bg-blue-900 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
+                  onClick={() => handleRemoveProduct(product.id)}
+                >
+                  Remover
+                </button>
+              </div>
             </div>
           ))}
         </div>

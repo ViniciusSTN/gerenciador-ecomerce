@@ -59,3 +59,7 @@ export type UpdateProductType = (
   id: number,
   product: EditProductData,
 ) => Promise<SuccessResponse | ErrorResponse>
+
+export type RemoveProductType = (
+  id: number,
+) => Promise<SuccessResponse | ErrorResponse>

@@ -2,6 +2,7 @@ import {
   CreateProductType,
   GetAllProductsType,
   GetProductType,
+  RemoveProductType,
   UpdateProductType,
 } from '@/types/products'
 import axios from 'axios'
@@ -68,6 +69,23 @@ export const updateProduct: UpdateProductType = async (id, product) => {
     await axios.put(url, {
       ...product,
     })
+
+    return {
+      success: true,
+    }
+  } catch (error: unknown) {
+    console.error(error)
+    return {
+      success: false,
+    }
+  }
+}
+
+export const removeProduct: RemoveProductType = async (id) => {
+  const url = `${process.env.NEXT_PUBLIC_API_BASE}/products/${id}`
+
+  try {
+    await axios.delete(url)
 
     return {
       success: true,
