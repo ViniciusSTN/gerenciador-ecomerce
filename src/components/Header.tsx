@@ -15,8 +15,16 @@ export const Header = () => {
       </Link>
 
       <nav className="flex">
-        <Link href="/produtos" className="hover:text-blue-500">
-          produtos
+        <Link href="/produtos" className="px-4 hover:text-blue-500">
+          Produtos
+        </Link>
+
+        <Link href="/novo-produto" className="px-4 hover:text-blue-500">
+          Novo produto
+        </Link>
+
+        <Link href="/carrinhos" className="px-4 hover:text-blue-500">
+          Carrinhos
         </Link>
       </nav>
     </header>
