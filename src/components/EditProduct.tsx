@@ -44,8 +44,6 @@ export const EditProduct: EditProductType = ({ editing }) => {
       if (id) {
         const result = await getProduct(Number(id))
 
-        console.log(result)
-
         if (result.success) {
           setProduct({
             title: result.product.title,

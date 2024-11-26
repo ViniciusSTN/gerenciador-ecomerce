@@ -13,10 +13,7 @@ export const ProductsSection = () => {
     const fetchProducts = async () => {
       const response = await getAllProducts()
 
-      if (response.success) {
-        console.log(response.products)
-        setProducts(response.products)
-      }
+      if (response.success) setProducts(response.products)
     }
 
     fetchProducts()

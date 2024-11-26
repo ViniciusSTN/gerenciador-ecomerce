@@ -26,6 +26,10 @@ export const Header = () => {
         <Link href="/carrinhos" className="px-4 hover:text-blue-500">
           Carrinhos
         </Link>
+
+        <Link href="/novo-carrinho" className="px-4 hover:text-blue-500">
+          Novo carrinho
+        </Link>
       </nav>
     </header>
   )
