@@ -10,7 +10,7 @@ import { Footer } from '@/components/Footer'
 const montserrat = Montserrat({ subsets: ['latin'] })
 
 export const metadata: Metadata = {
-  title: 'Gerenciador Ecomerce',
+  title: 'MultiShop',
 }
 
 export default function RootLayout({
