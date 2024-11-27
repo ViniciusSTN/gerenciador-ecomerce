@@ -1,5 +1,6 @@
 'use client'
 
+import { SpinLoader } from '@/components/SpinLoader'
 import { getAllUsers, removeUser } from '@/data/users'
 import { UserTypeWithId } from '@/types/users'
 import Link from 'next/link'
@@ -8,12 +9,19 @@ import { toast } from 'react-toastify'
 
 export const UsersSection = () => {
   const [users, setUsers] = useState<UserTypeWithId[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getAllUsers()
 
-      if (response.success) setUsers(response.users)
+      if (response.success) {
+        setUsers(response.users)
+      } else {
+        toast.error('Erro ao buscar dados de usuários')
+      }
+
+      setLoading(false)
     }
 
     fetchProducts()
@@ -45,7 +53,13 @@ export const UsersSection = () => {
         </Link>
       </div>
 
-      {users.length > 0 && (
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <SpinLoader />
+        </div>
+      )}
+
+      {!loading && users.length > 0 && (
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
           {users.map((user, index) => (
             <li

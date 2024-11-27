@@ -18,7 +18,9 @@ export const EditProductSection = () => {
 
   return (
     <section>
-      <h1 className="mb-10 text-center text-2xl font-semibold">Novo produto</h1>
+      <h1 className="mb-10 text-center text-2xl font-semibold">
+        Editar produto
+      </h1>
 
       <EditProduct editing />
     </section>

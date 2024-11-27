@@ -1,5 +1,6 @@
 'use client'
 
+import { SpinLoader } from '@/components/SpinLoader'
 import { formatDate, getAllCarts, removeCart } from '@/data/carts'
 import { CartType } from '@/types/carts'
 import Link from 'next/link'
@@ -8,16 +9,19 @@ import { toast } from 'react-toastify'
 
 export const CartsSection = () => {
   const [carts, setCarts] = useState<CartType[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchCarts = async () => {
       const result = await getAllCarts()
 
-      console.log(result)
-
       if (result.success) {
         setCarts(result.carts)
+      } else {
+        toast.error('Erro ao buscar produtos')
       }
+
+      setLoading(false)
     }
 
     fetchCarts()
@@ -51,7 +55,13 @@ export const CartsSection = () => {
         </Link>
       </div>
 
-      {carts.length > 0 && (
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <SpinLoader />
+        </div>
+      )}
+
+      {!loading && carts.length > 0 && (
         <ul className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {carts.map((cart, index) => (
             <li

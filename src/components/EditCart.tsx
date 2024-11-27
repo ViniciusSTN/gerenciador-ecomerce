@@ -5,6 +5,7 @@ import { CartDataType, EditCartType } from '@/types/carts'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import { SpinLoader } from './SpinLoader'
 
 const initialData: CartDataType = {
   userId: 0,
@@ -14,6 +15,7 @@ const initialData: CartDataType = {
 
 export const EditCart: EditCartType = ({ editing }) => {
   const [cart, setCart] = useState<CartDataType>(initialData)
+  const [loading, setLoading] = useState<boolean>(true)
 
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
@@ -28,11 +30,16 @@ export const EditCart: EditCartType = ({ editing }) => {
 
         if (result.success) {
           setCart(result.cart)
+        } else {
+          toast.error('Erro ao buscar dados do carrinho')
         }
+
+        setLoading(false)
       }
     }
 
     if (editing && id) fetchCartData()
+    else setLoading(false)
   }, [editing, id])
 
   const handleAddItem = () => {
@@ -124,57 +131,69 @@ export const EditCart: EditCartType = ({ editing }) => {
   }
 
   return (
-    <form action="" className="mx-auto max-w-96" onSubmit={handleFormSubmit}>
-      <div className="flex flex-col gap-5">
-        <label className="flex flex-col">
-          <span className="font-medium">Id do usuário</span>
-          <input
-            type="number"
-            placeholder="Ex: 1"
-            className="rounded-sm border border-gray-400 px-2 py-1"
-            name="title"
-            value={cart.userId}
-            onChange={handleUserIdChange}
-          />
-        </label>
-
-        {cart.products.length > 0 && (
-          <ul>
-            {cart.products.map((product, index) => (
-              <li key={index} className="flex justify-between">
-                <span>
-                  Produto {product.productId} | {product.quantity} unidades
-                </span>
-
-                <button
-                  className="text-red"
-                  type="button"
-                  onClick={() => handleDeleteItem(index)}
-                >
-                  Deletar
-                </button>
-              </li>
-            ))}
-          </ul>
-        )}
-
-        <div className="flex justify-end">
-          <button
-            className="rounded-md border bg-blue-900 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
-            type="button"
-            onClick={handleAddItem}
-          >
-            Adicionar item
-          </button>
+    <>
+      {loading ? (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <SpinLoader />
         </div>
-
-        <button
-          className="rounded-md border bg-blue-950 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
-          type="submit"
+      ) : (
+        <form
+          action=""
+          className="mx-auto max-w-96"
+          onSubmit={handleFormSubmit}
         >
-          {editing ? 'Editar carrinho' : 'Criar novo carrinho'}
-        </button>
-      </div>
-    </form>
+          <div className="flex flex-col gap-5">
+            <label className="flex flex-col">
+              <span className="font-medium">Id do usuário</span>
+              <input
+                type="number"
+                placeholder="Ex: 1"
+                className="rounded-sm border border-gray-400 px-2 py-1"
+                name="title"
+                value={cart.userId}
+                onChange={handleUserIdChange}
+              />
+            </label>
+
+            {cart.products.length > 0 && (
+              <ul>
+                {cart.products.map((product, index) => (
+                  <li key={index} className="flex justify-between">
+                    <span>
+                      Produto {product.productId} | {product.quantity} unidades
+                    </span>
+
+                    <button
+                      className="text-red"
+                      type="button"
+                      onClick={() => handleDeleteItem(index)}
+                    >
+                      Deletar
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+
+            <div className="flex justify-end">
+              <button
+                className="rounded-md border bg-blue-900 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
+                type="button"
+                onClick={handleAddItem}
+              >
+                Adicionar item
+              </button>
+            </div>
+
+            <button
+              className="rounded-md border bg-blue-950 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
+              type="submit"
+            >
+              {editing ? 'Editar carrinho' : 'Criar novo carrinho'}
+            </button>
+          </div>
+        </form>
+      )}
+    </>
   )
 }

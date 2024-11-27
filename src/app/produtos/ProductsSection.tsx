@@ -1,5 +1,6 @@
 'use client'
 
+import { SpinLoader } from '@/components/SpinLoader'
 import { getAllProducts, removeProduct } from '@/data/products'
 import { ProductType } from '@/types/products'
 import Link from 'next/link'
@@ -8,12 +9,19 @@ import { toast } from 'react-toastify'
 
 export const ProductsSection = () => {
   const [products, setProducts] = useState<ProductType[]>([])
+  const [loading, setLoading] = useState<boolean>(true)
 
   useEffect(() => {
     const fetchProducts = async () => {
       const response = await getAllProducts()
 
-      if (response.success) setProducts(response.products)
+      if (response.success) {
+        setProducts(response.products)
+      } else {
+        toast.error('Erro ao buscar dados de produtos')
+      }
+
+      setLoading(false)
     }
 
     fetchProducts()
@@ -45,7 +53,13 @@ export const ProductsSection = () => {
         </Link>
       </div>
 
-      {products.length > 0 && (
+      {loading && (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <SpinLoader />
+        </div>
+      )}
+
+      {!loading && products.length > 0 && (
         <div className="grid grid-cols-1 gap-3 md:grid-cols-2 lg:grid-cols-3">
           {products.map((product, index) => (
             <div

@@ -10,6 +10,7 @@ import {
 import { useRouter, useSearchParams } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
+import { SpinLoader } from './SpinLoader'
 
 const initialData: EditProductData = {
   title: '',
@@ -32,6 +33,8 @@ export const EditProduct: EditProductType = ({ editing }) => {
   const [productErrors, setProductErrors] =
     useState<EditProductDataErrors>(initialErrors)
 
+  const [loading, setLoading] = useState<boolean>(true)
+
   const searchParams = useSearchParams()
   const id = searchParams.get('id')
 
@@ -52,11 +55,16 @@ export const EditProduct: EditProductType = ({ editing }) => {
             description: result.product.description,
             price: result.product.price,
           })
+        } else {
+          toast.error('Erro ao buscar dados do produto')
         }
+
+        setLoading(false)
       }
     }
 
     if (editing && id) fetchProductData()
+    else setLoading(false)
   }, [editing, searchParams, id])
 
   const handleFormSubmit = async (event: React.FormEvent) => {
@@ -151,95 +159,107 @@ export const EditProduct: EditProductType = ({ editing }) => {
   }
 
   return (
-    <form action="" className="mx-auto max-w-96" onSubmit={handleFormSubmit}>
-      <div className="flex flex-col gap-5">
-        <label className="flex flex-col">
-          <span className="font-medium">Título</span>
-          <input
-            type="text"
-            placeholder="Ex: Camisa masculina"
-            className={`rounded-sm border px-2 py-1 ${productErrors.title.length > 0 ? 'border-red' : 'border-gray-400'}`}
-            onChange={handleInputChange}
-            name="title"
-            value={product.title}
-          />
-          {productErrors.title.length > 0 &&
-            productErrors.title.map((error, index) => (
-              <small key={index}>{error}</small>
-            ))}
-        </label>
-
-        <label className="flex flex-col">
-          <span className="font-medium">Preço</span>
-          <input
-            type="number"
-            placeholder="Ex: 119,90"
-            className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.price.length > 0 ? 'border-red' : 'border-gray-400'}`}
-            onChange={handleInputChange}
-            name="price"
-            value={product.price}
-          />
-          {productErrors.price.length > 0 &&
-            productErrors.price.map((error, index) => (
-              <small key={index}>{error}</small>
-            ))}
-        </label>
-
-        <label className="flex flex-col">
-          <span className="font-medium">Descrição</span>
-          <input
-            type="text"
-            placeholder="Ex: Camisa masculina de algodão"
-            className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.description.length > 0 ? 'border-red' : 'border-gray-400'}`}
-            onChange={handleInputChange}
-            name="description"
-            value={product.description}
-          />
-          {productErrors.description.length > 0 &&
-            productErrors.description.map((error, index) => (
-              <small key={index}>{error}</small>
-            ))}
-        </label>
-
-        <label className="flex flex-col">
-          <span className="font-medium">Categoria</span>
-          <input
-            type="text"
-            placeholder="Ex: Camisa"
-            className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.category.length > 0 ? 'border-red' : 'border-gray-400'}`}
-            onChange={handleInputChange}
-            name="category"
-            value={product.category}
-          />
-          {productErrors.category.length > 0 &&
-            productErrors.category.map((error, index) => (
-              <small key={index}>{error}</small>
-            ))}
-        </label>
-
-        <label className="flex flex-col">
-          <span className="font-medium">Imagem</span>
-          <input
-            type="file"
-            accept="image/*"
-            className={`${productErrors.image.length > 0 && 'rounded-sm border border-red'}`}
-            onChange={handleImageChange}
-            name="image"
-            ref={fileInputRef}
-          />
-          {productErrors.image.length > 0 &&
-            productErrors.image.map((error, index) => (
-              <small key={index}>{error}</small>
-            ))}
-        </label>
-
-        <button
-          className="rounded-md border bg-blue-950 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
-          type="submit"
+    <>
+      {loading ? (
+        <div className="fixed inset-0 flex items-center justify-center">
+          <SpinLoader />
+        </div>
+      ) : (
+        <form
+          action=""
+          className="mx-auto max-w-96"
+          onSubmit={handleFormSubmit}
         >
-          {editing ? 'Editar produto' : 'Criar novo produto'}
-        </button>
-      </div>
-    </form>
+          <div className="flex flex-col gap-5">
+            <label className="flex flex-col">
+              <span className="font-medium">Título</span>
+              <input
+                type="text"
+                placeholder="Ex: Camisa masculina"
+                className={`rounded-sm border px-2 py-1 ${productErrors.title.length > 0 ? 'border-red' : 'border-gray-400'}`}
+                onChange={handleInputChange}
+                name="title"
+                value={product.title}
+              />
+              {productErrors.title.length > 0 &&
+                productErrors.title.map((error, index) => (
+                  <small key={index}>{error}</small>
+                ))}
+            </label>
+
+            <label className="flex flex-col">
+              <span className="font-medium">Preço</span>
+              <input
+                type="number"
+                placeholder="Ex: 119,90"
+                className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.price.length > 0 ? 'border-red' : 'border-gray-400'}`}
+                onChange={handleInputChange}
+                name="price"
+                value={product.price}
+              />
+              {productErrors.price.length > 0 &&
+                productErrors.price.map((error, index) => (
+                  <small key={index}>{error}</small>
+                ))}
+            </label>
+
+            <label className="flex flex-col">
+              <span className="font-medium">Descrição</span>
+              <input
+                type="text"
+                placeholder="Ex: Camisa masculina de algodão"
+                className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.description.length > 0 ? 'border-red' : 'border-gray-400'}`}
+                onChange={handleInputChange}
+                name="description"
+                value={product.description}
+              />
+              {productErrors.description.length > 0 &&
+                productErrors.description.map((error, index) => (
+                  <small key={index}>{error}</small>
+                ))}
+            </label>
+
+            <label className="flex flex-col">
+              <span className="font-medium">Categoria</span>
+              <input
+                type="text"
+                placeholder="Ex: Camisa"
+                className={`rounded-sm border border-gray-400 px-2 py-1 ${productErrors.category.length > 0 ? 'border-red' : 'border-gray-400'}`}
+                onChange={handleInputChange}
+                name="category"
+                value={product.category}
+              />
+              {productErrors.category.length > 0 &&
+                productErrors.category.map((error, index) => (
+                  <small key={index}>{error}</small>
+                ))}
+            </label>
+
+            <label className="flex flex-col">
+              <span className="font-medium">Imagem</span>
+              <input
+                type="file"
+                accept="image/*"
+                className={`${productErrors.image.length > 0 && 'rounded-sm border border-red'}`}
+                onChange={handleImageChange}
+                name="image"
+                ref={fileInputRef}
+              />
+              {productErrors.image.length > 0 &&
+                productErrors.image.map((error, index) => (
+                  <small key={index}>{error}</small>
+                ))}
+            </label>
+
+            <button
+              className="rounded-md border bg-blue-950 px-4 py-2 text-lg font-semibold text-white active:border active:border-blue-950 active:outline active:outline-1"
+              type="submit"
+            >
+              {editing ? 'Editar produto' : 'Criar novo produto'}
+            </button>
+          </div>
+        </form>
+      )}
+    </>
   )
 }
