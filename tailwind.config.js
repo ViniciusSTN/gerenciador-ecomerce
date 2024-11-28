@@ -6,15 +6,9 @@ module.exports = {
     // './app/**/*.{js,ts,jsx,tsx,mdx}',
     // './pages/**/*.{js,ts,jsx,tsx,mdx}',
     // './components/**/*.{js,ts,jsx,tsx,mdx}',
-
-    // Or if using `src` directory:
     './src/**/*.{js,ts,jsx,tsx,mdx}',
   ],
   theme: {
-    // fontFamily: {
-    //   Montserrat: ['Montserrat', 'sans-serif'],
-    //   Poppins: ['Poppins', 'sans-serif'],
-    // },
     extend: {
       colors: {
         red: '#FF0000',
@@ -26,11 +20,6 @@ module.exports = {
       screens: {
         '1.5xl': '1440px',
       },
-      // backgroundImage: {},
-      // fontSize: {},
-      // padding: {},
-      // lineHeight: {},
-      // gridTemplateColumns: {},
       boxShadow: {
         clean: 'rgba(100, 100, 111, 0.2) 0px 7px 29px 0px',
         'very-clean': '1px 2px 6px 2px rgba(100, 100, 111, 0.2)',

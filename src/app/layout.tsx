@@ -1,6 +1,5 @@
 import type { Metadata } from 'next'
 import { Montserrat } from 'next/font/google'
-import RecoilContextProvider from '@/lib/recoilContextProvider'
 import { ToastContainer } from 'react-toastify'
 import './globals.css'
 import 'react-toastify/ReactToastify.min.css'
@@ -21,12 +20,10 @@ export default function RootLayout({
   return (
     <html lang="pt-br">
       <body className={montserrat.className}>
-        <RecoilContextProvider>
-          <ToastContainer />
-          <Header />
-          {children}
-          <Footer />
-        </RecoilContextProvider>
+        <ToastContainer />
+        <Header />
+        {children}
+        <Footer />
       </body>
     </html>
   )
