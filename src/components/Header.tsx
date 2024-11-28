@@ -1,18 +1,28 @@
 'use client'
 
-import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { useCookies } from '@/hooks/cookies'
+import { deleteUserSession } from '@/data/login'
+import Link from 'next/link'
+import { toast } from 'react-toastify'
 
 export const Header = () => {
   const [menuActive, setMenuActive] = useState<boolean>(false)
   const [mobile, setMobile] = useState<boolean>(false)
-  const [loading, setLoading] = useState<boolean>(true)
+  const [mobileLoading, setMobileLoading] = useState<boolean>(true)
+  const [token, setToken] = useState<string | null>(null)
+
+  const currentToken = useCookies('session')
+
+  useEffect(() => {
+    if (currentToken) setToken(currentToken)
+  }, [currentToken])
 
   useEffect(() => {
     const handleResize = () => {
       const width = window.innerWidth
       setMobile(width < 1024)
-      setLoading(false)
+      setMobileLoading(false)
     }
 
     handleResize()
@@ -20,6 +30,13 @@ export const Header = () => {
 
     return () => removeEventListener('resize', handleResize)
   }, [])
+
+  const handleLogOutClick = () => {
+    setMenuActive(false)
+    deleteUserSession()
+    setToken(null)
+    toast.success('Deslogado com sucesso')
+  }
 
   return (
     <header className="mx-auto max-w-1440px px-4 py-2 md:px-8 lg:px-10">
@@ -51,13 +68,13 @@ export const Header = () => {
           </button>
         </div>
 
-        {!loading && (
+        {!mobileLoading && (
           <nav
-            className={`fixed top-20 z-50 flex flex-col gap-4 text-xl font-medium text-white lg:static lg:flex-row lg:gap-0 lg:text-lg lg:text-black ${!menuActive && mobile && 'hidden'}`}
+            className={`fixed top-20 z-50 flex flex-col gap-4 text-xl font-semibold text-white lg:static lg:flex-row lg:gap-0 lg:text-base lg:text-black ${!menuActive && mobile && 'hidden'}`}
           >
             <Link
               href="/produtos"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Produtos
@@ -65,7 +82,7 @@ export const Header = () => {
 
             <Link
               href="/novo-produto"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Novo produto
@@ -73,7 +90,7 @@ export const Header = () => {
 
             <Link
               href="/carrinhos"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Carrinhos
@@ -81,7 +98,7 @@ export const Header = () => {
 
             <Link
               href="/novo-carrinho"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Novo carrinho
@@ -89,7 +106,7 @@ export const Header = () => {
 
             <Link
               href="/usuarios"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Usuários
@@ -97,11 +114,29 @@ export const Header = () => {
 
             <Link
               href="/novo-usuario"
-              className="px-4 hover:text-blue-500"
+              className="px-3 hover:text-blue-500"
               onClick={() => setMenuActive(false)}
             >
               Novo usuário
             </Link>
+
+            {token && token.length > 0 ? (
+              <button
+                type="button"
+                className="px-3 text-start hover:text-blue-500"
+                onClick={handleLogOutClick}
+              >
+                Deslogar
+              </button>
+            ) : (
+              <Link
+                href="/login"
+                className="px-3 hover:text-blue-500"
+                onClick={() => setMenuActive(false)}
+              >
+                Logar
+              </Link>
+            )}
           </nav>
         )}
       </div>
