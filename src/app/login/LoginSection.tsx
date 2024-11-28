@@ -2,7 +2,7 @@
 
 import { createUserSession, userLogin } from '@/data/login'
 import { LoginDataType, LoginErrorsType } from '@/types/login'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { toast } from 'react-toastify'
 
 const initialData: LoginDataType = {

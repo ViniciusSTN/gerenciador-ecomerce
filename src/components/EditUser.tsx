@@ -1,5 +1,3 @@
-'use client'
-
 import { createUser, getUserData, updateUser } from '@/data/users'
 import { editUserSchema } from '@/schemas/user'
 import { EditUserType, UserErrors, UserStateType } from '@/types/users'
@@ -70,6 +68,8 @@ export const EditUser: EditUserType = ({ editing }) => {
 
   const handleFormSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault()
+
+    console.log(user)
 
     const validations = editUserSchema.safeParse(user)
 

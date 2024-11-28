@@ -2,14 +2,19 @@
 
 import { SpinLoader } from '@/components/SpinLoader'
 import { formatDate, getAllCarts, removeCart } from '@/data/carts'
+import { useCookies } from '@/hooks/cookies'
 import { CartType } from '@/types/carts'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import Link from 'next/link'
 
 export const CartsSection = () => {
   const [carts, setCarts] = useState<CartType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+
+  const router = useRouter()
+  const token = useCookies('session')
 
   useEffect(() => {
     const fetchCarts = async () => {
@@ -24,8 +29,13 @@ export const CartsSection = () => {
       setLoading(false)
     }
 
-    fetchCarts()
-  }, [])
+    if (!token || token.length < 0) {
+      router.push('/login')
+      toast.warning('É preciso logar para acessar essa página')
+    } else {
+      fetchCarts()
+    }
+  }, [router, token])
 
   const handleRemoveCart = async (id: number) => {
     const result = await removeCart(id)

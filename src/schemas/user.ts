@@ -22,6 +22,6 @@ export const editUserSchema = z.object({
   long: z.string().min(1, 'A longitude é obrigatória'),
   phone: z
     .string()
-    .min(10, 'O telefone é obrigatório')
+    .min(1, 'O telefone é obrigatório')
     .regex(/^\d+$/, 'O telefone deve conter apenas números'),
 })

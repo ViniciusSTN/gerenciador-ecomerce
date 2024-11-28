@@ -1,5 +1,3 @@
-'use client'
-
 import { createCartItem, getCart, updateCartItems } from '@/data/carts'
 import { CartDataType, EditCartType } from '@/types/carts'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation'

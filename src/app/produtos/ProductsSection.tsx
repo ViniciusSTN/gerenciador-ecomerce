@@ -2,14 +2,19 @@
 
 import { SpinLoader } from '@/components/SpinLoader'
 import { getAllProducts, removeProduct } from '@/data/products'
+import { useCookies } from '@/hooks/cookies'
 import { ProductType } from '@/types/products'
-import Link from 'next/link'
+import { useRouter } from 'next/navigation'
 import { useEffect, useState } from 'react'
 import { toast } from 'react-toastify'
+import Link from 'next/link'
 
 export const ProductsSection = () => {
   const [products, setProducts] = useState<ProductType[]>([])
   const [loading, setLoading] = useState<boolean>(true)
+
+  const router = useRouter()
+  const token = useCookies('session')
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -24,8 +29,13 @@ export const ProductsSection = () => {
       setLoading(false)
     }
 
-    fetchProducts()
-  }, [])
+    if (token && token.length > 0) {
+      fetchProducts()
+    } else {
+      toast.warning('É preciso logar para acessar essa página')
+      router.push('/login')
+    }
+  }, [token, router])
 
   const handleRemoveProduct = async (id: number) => {
     const result = await removeProduct(id)

@@ -1,5 +1,3 @@
-'use client'
-
 import { createProduct, getProduct, updateProduct } from '@/data/products'
 import { editProductSchema } from '@/schemas/product'
 import {

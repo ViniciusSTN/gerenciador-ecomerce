@@ -36,6 +36,10 @@ export const Header = () => {
     deleteUserSession()
     setToken(null)
     toast.success('Deslogado com sucesso')
+
+    setTimeout(() => {
+      window.location.href = '/'
+    }, 1500)
   }
 
   return (
